@@ -12,7 +12,7 @@ This repository contains code and slides submitted as a case study interview on 
 
 Codes are numbered to show its sequence to be reviewed. 
 
-Visit the Tableau Dashboard [here](https://public.tableau.com/views/HDBResaleCaseStudy/Story1?:embed=y&:display_count=yes&publish=yes). 
+Visit the Tableau Dashboard [here](https://public.tableau.com/views/HDBResaleCaseStudyedited/Story1?:embed=y&:display_count=yes). 
 
 
 
