@@ -15,7 +15,7 @@ Visit the Tableau Dashboard [here](https://public.tableau.com/shared/DCJRRJKC9?:
 
 ------
 
-![pricetrend](pictures\pricetrend.PNG)
+![pricetrend](https://github.com/longwind48/HDB_Resale_Transactions_Analysis/tree/master/pictures\pricetrend.PNG)
 
 
 
