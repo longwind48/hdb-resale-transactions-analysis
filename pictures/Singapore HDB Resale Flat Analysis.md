@@ -2,20 +2,18 @@
 
 By: Traci Lim
 
-------
+---
 
 We will be looking at HDB resale flat transactions for the past 28 years, 1990 to 2018. The main motivation of this analysis is to get a hold on what the HDB resale market is like. In economics, we are interested in something called the equilibrium, where supply meets demand. This means that there's no surplus and no shortage of goods. If we think of housing as a good, well, it is a complex market because it is a good that cannot be built quickly, so perfect matching of supply with demand is not feasible. In this analysis, we will be looking at:
 
 1. Some charts built from Tableau and Python
 2. HDB resale flat suggestion tool
-3. Predicting housing prices ([link](2_regression.ipynb))
+3. Predicting housing prices ()
 4. Difference-in-differences model to estimate the impact of the opening of downtown MRT line have on housing prices
 
-Visit the Tableau Dashboard [here](https://public.tableau.com/shared/DCJRRJKC9?:display_count=yes). 
+---
 
-------
-
-![pricetrend](C:\Users\longwind48\Google Drive\Programming\Projects\HDB_Resale_Transactions_Analysis\pictures\pricetrend.PNG)
+![pricetrend](C:\Users\longwind48\Google Drive\Programming\Projects\hdb\pricetrend.PNG)
 
 
 
@@ -29,21 +27,21 @@ If we look at the yearly trend on median resale prices across towns, we can obse
 
 As you may know, the Singapore government has always played a pivotal role in developing and managing the residential land and property market, ever since the 1960s. The government is primarily interested in making housing affordable for people. In Sep 2009, up to Dec 2013, when prices were growing rapidly, of course the government is worried. So looking at the number of transactions line chart, we can see drop in the number of flats purchase in the year 2010 to 2011, as well as 2012 to 2013. This is probably due to the cooling measures implemented by the government in that timeframe. In fact, they introduced a total of 10 cooling measures, which are policies that are aimed at relaxing the growing prices of the property market, so as to maintain affordability.
 
-![transactions1](C:\Users\longwind48\Google Drive\Programming\Projects\HDB_Resale_Transactions_Analysis\pictures\transactions1.PNG)
+![transactions1](C:\Users\longwind48\Google Drive\Programming\Projects\hdb\transactions1.PNG)
 
 The government introduced a Seller’s stamp duty (SSD) for properties sold within 1 year of purchase, which was changed to 3 then 4 years years of purchase in 2011, that is payable by the home seller should he/she wants to sell their property. They lowered loan-to-value ratio (LTV) limits to In Dec 2011, which basically says you cannot borrow as much, so your downpayment just got bigger. They also introduced an Additional Buyer’s Stamp Duty (ABSD) that basically says now if you want to buy a 2nd home or 3rd home or if you’re a foreigner or PR, you pay more taxes. With the Mortgage service ratio, only 30% of a borrower’s income can be used to service the mortgage on HDBs or ECs. Some other stuff are Total Debt Servicing Ratio (TSDR), which limits the amount borrowers can spend on debt repayments to 60 percent of their gross monthly income, basically to ensure that  people borrow, and banks lend, responsibly. These debt repayments include car loans, credit card debt or personal loans. So, this is a rundown on the cooling measures that government have implemented. More recently, in 2018, ABSD went up again, and LTV limits went down. In other words, home buyers have to pay more taxes, and cannot borrow as much, so downpayment once again got bigger. Certainly, it looks like the cooling measures have worked, the prices finally came down after the government finished their ‘rapid firing’ of cooling measures, because they were implemented often within 6 months of one another. However, we must understand that those cooling measures mainly targeted at the private housing market. We know HDB concessionary loans are not affected by LTV limits and ABSD, but these cooling measures still managed to cause a two shocks in the number of transactions of HDB resale flats in year 2011 and 2013. This is most probably due to spillover effects of the impact on private housing market. As it becomes more costly to purchase new private properties, people who originally wanted to buy them would refrain from buying, causing the prices to fall in favor for first-time home buyers who wanted to buy a HDB, because they gained a second option---less expensive private condos. 
 
 Whether or not the cooling measures made any substantial impacts on the housing market can be confirmed in two ways: informally or formally. Informally, one can just look at what happened to the price trend and draw some intuitions. The thing about informal methods of assessing the impacts of policies is that this is what we call eyeball econometrics. What we did up till now, are all considered eyeball econometrics. Eyeball econometrics cannot attribute causality to any of these policies. Because the housing market is a very complex market, there are a variety of macroeconomic factors that may affect the prices, that cannot be understood from just HDB resale transactions. Usually there will be researchers and ecometricians working on formal statistical methods to confirm the true impacts of these measures. But I doubt that that is going to be an easy task, because the cooling measures are implemented so closely within one another, it is near impossible for these econometricians to control for biases. 
 
-------
+---
 
 ### HDB Resale Flat Suggestion Tool
 
 With the cleaned and preprocessed data, a HDB resale flat suggestion tool will possibly be useful to some extent. We’ll be looking at a dashboard that suggests flat types and towns suited for a user’s input budget. You can optimize your preferences according to how close is the flat to the nearest MRT station or school. The dashboard will run through the data and output a highlight table according to your preferences, which shows the median prices of resale units for 2017 and 2018 transactions. I managed to input a distance option into the tool by calculating the distance to the nearest MRT station and school for all HDBs in the data. All preprocessing code can be view in.
 
-![tool](C:\Users\longwind48\Google Drive\Programming\Projects\HDB_Resale_Transactions_Analysis\pictures\tool.PNG)
+![tool](C:\Users\longwind48\Google Drive\Programming\Projects\hdb\tool.PNG)
 
-------
+---
 
 ### Policy Analysis using Difference-in-Differences model
 
@@ -51,11 +49,11 @@ Let’s think about this. How should we conduct a formal statistical test, as an
 
 In other words, this Diff-in-diff model is going to tell us, how much of an impact did the opening of DTL make on HDB resale prices. To set up our model, we need to select 2 groups, a control and a treatment group. The treatment group is group of flats that we think will benefit from the opening of DTL, the control group is a group of flats that we think will be indifferent to the opening of DTL. More specifically, we put all flats within 1km radius of any DTL station into the treatment group, and all flats outside 1km radius of any DTL station into the control group. 
 
-![did1](C:\Users\longwind48\Google Drive\Programming\Projects\HDB_Resale_Transactions_Analysis\pictures\did1.png)
+![did1](C:\Users\longwind48\Google Drive\Programming\Projects\hdb\did1.png)
 
 We are using data on the two groups, before and after the treatment occurs. The diff-in-diff estimate calculates the difference in outcomes before and after the treatment. Then, the difference between those two differences is the estimated effect of the treatment. So, did the opening of DTL affect average price per sqm of HDB resale flats? The reason we’re looking at the average price per sqm instead of resale prices, is because average price per sqm suffers from a lower variance than resale prices. So the spread of values is bigger in resale prices than in price per sqm, especially since we are talking about the spread of prices in all flat types. So I think using average price per sqm here is more appropriate. The average price per sqm is the average price per sqm of all flats in that month, be it a 5-room, or 2-room, or 10 storey, or Yishun, or Central area. So the number of flats in the control group is around 100k, and number of flats in treatment group is around 500k. 
 
-![did2](C:\Users\longwind48\Google Drive\Programming\Projects\HDB_Resale_Transactions_Analysis\pictures\did2.PNG)
+![did2](C:\Users\longwind48\Google Drive\Programming\Projects\hdb\did2.PNG)
 
 We plot log-average-price-per-sqm with respect to the sale time, which is indicated by the number of months starting from the first sample date of Jan 2010. The curves show the price gradient for houses in the control and treatment groups, fitted by a higher-order polynomial regression. To put it in layman terms, we are looking a plot of average price per sqm points, and then a best fit line is drawn to match these points, similar to linear regression, except in case, the line is not straight, it is curvy. 
 
@@ -65,7 +63,7 @@ Now that we’ve got a good idea of the price trends of control and treatment gr
 
 So, as for every statistical model, there are weaknesses and strengths. For this model, it does not control for other housing attributes like storey range, town, flat type, or location attributes, like distance to nearest MRT, distance to city. We can definitely build a better model that controls for such attributes. So instead of regressing on just 3 variables, we can add additional features.
 
-------
+---
 
 ### Conclusion
 

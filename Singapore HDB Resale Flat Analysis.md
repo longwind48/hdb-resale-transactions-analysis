@@ -2,7 +2,7 @@
 
 By: Traci Lim
 
-------
+---
 
 We will be looking at HDB resale flat transactions for the past 28 years, 1990 to 2018. The main motivation of this analysis is to get a hold on what the HDB resale market is like. In economics, we are interested in something called the equilibrium, where supply meets demand. This means that there's no surplus and no shortage of goods. If we think of housing as a good, well, it is a complex market because it is a good that cannot be built quickly, so perfect matching of supply with demand is not feasible. In this analysis, we will be looking at:
 
@@ -13,7 +13,7 @@ We will be looking at HDB resale flat transactions for the past 28 years, 1990 t
 
 Visit the Tableau Dashboard [here](https://public.tableau.com/shared/DCJRRJKC9?:display_count=yes). 
 
-------
+---
 
 ![pricetrend](C:\Users\longwind48\Google Drive\Programming\Projects\HDB_Resale_Transactions_Analysis\pictures\pricetrend.PNG)
 
@@ -35,7 +35,7 @@ The government introduced a Seller’s stamp duty (SSD) for properties sold with
 
 Whether or not the cooling measures made any substantial impacts on the housing market can be confirmed in two ways: informally or formally. Informally, one can just look at what happened to the price trend and draw some intuitions. The thing about informal methods of assessing the impacts of policies is that this is what we call eyeball econometrics. What we did up till now, are all considered eyeball econometrics. Eyeball econometrics cannot attribute causality to any of these policies. Because the housing market is a very complex market, there are a variety of macroeconomic factors that may affect the prices, that cannot be understood from just HDB resale transactions. Usually there will be researchers and ecometricians working on formal statistical methods to confirm the true impacts of these measures. But I doubt that that is going to be an easy task, because the cooling measures are implemented so closely within one another, it is near impossible for these econometricians to control for biases. 
 
-------
+---
 
 ### HDB Resale Flat Suggestion Tool
 
@@ -43,7 +43,7 @@ With the cleaned and preprocessed data, a HDB resale flat suggestion tool will p
 
 ![tool](C:\Users\longwind48\Google Drive\Programming\Projects\HDB_Resale_Transactions_Analysis\pictures\tool.PNG)
 
-------
+---
 
 ### Policy Analysis using Difference-in-Differences model
 
@@ -65,7 +65,7 @@ Now that we’ve got a good idea of the price trends of control and treatment gr
 
 So, as for every statistical model, there are weaknesses and strengths. For this model, it does not control for other housing attributes like storey range, town, flat type, or location attributes, like distance to nearest MRT, distance to city. We can definitely build a better model that controls for such attributes. So instead of regressing on just 3 variables, we can add additional features.
 
-------
+---
 
 ### Conclusion
 
