@@ -15,7 +15,7 @@ Visit the Tableau Dashboard [here](https://public.tableau.com/shared/DCJRRJKC9?:
 
 ------
 
-![pricetrend](https://github.com/longwind48/HDB_Resale_Transactions_Analysis/tree/master/pictures/pricetrend.PNG)
+![pricetrend](pictures/pricetrend.PNG)
 
 
 
@@ -41,7 +41,7 @@ Whether or not the cooling measures made any substantial impacts on the housing 
 
 With the cleaned and preprocessed data, a HDB resale flat suggestion tool will possibly be useful to some extent. We’ll be looking at a dashboard that suggests flat types and towns suited for a user’s input budget. You can optimize your preferences according to how close is the flat to the nearest MRT station or school. The dashboard will run through the data and output a highlight table according to your preferences, which shows the median prices of resale units for 2017 and 2018 transactions. I managed to input a distance option into the tool by calculating the distance to the nearest MRT station and school for all HDBs in the data. All preprocessing code can be view in.
 
-![tool](pictures\tool.PNG)
+![tool](pictures/tool.PNG)
 
 ------
 
@@ -51,11 +51,11 @@ Let’s think about this. How should we conduct a formal statistical test, as an
 
 In other words, this Diff-in-diff model is going to tell us, how much of an impact did the opening of DTL make on HDB resale prices. To set up our model, we need to select 2 groups, a control and a treatment group. The treatment group is group of flats that we think will benefit from the opening of DTL, the control group is a group of flats that we think will be indifferent to the opening of DTL. More specifically, we put all flats within 1km radius of any DTL station into the treatment group, and all flats outside 1km radius of any DTL station into the control group. 
 
-![did1](pictures\did1.png)
+![did1](pictures/did1.png)
 
 We are using data on the two groups, before and after the treatment occurs. The diff-in-diff estimate calculates the difference in outcomes before and after the treatment. Then, the difference between those two differences is the estimated effect of the treatment. So, did the opening of DTL affect average price per sqm of HDB resale flats? The reason we’re looking at the average price per sqm instead of resale prices, is because average price per sqm suffers from a lower variance than resale prices. So the spread of values is bigger in resale prices than in price per sqm, especially since we are talking about the spread of prices in all flat types. So I think using average price per sqm here is more appropriate. The average price per sqm is the average price per sqm of all flats in that month, be it a 5-room, or 2-room, or 10 storey, or Yishun, or Central area. So the number of flats in the control group is around 100k, and number of flats in treatment group is around 500k. 
 
-![did2](pictures\did2.PNG)
+![did2](pictures/did2.PNG)
 
 We plot log-average-price-per-sqm with respect to the sale time, which is indicated by the number of months starting from the first sample date of Jan 2010. The curves show the price gradient for houses in the control and treatment groups, fitted by a higher-order polynomial regression. To put it in layman terms, we are looking a plot of average price per sqm points, and then a best fit line is drawn to match these points, similar to linear regression, except in case, the line is not straight, it is curvy. 
 
