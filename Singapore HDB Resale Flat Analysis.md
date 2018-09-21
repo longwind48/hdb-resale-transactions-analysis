@@ -7,7 +7,7 @@ By: Traci Lim
 We will be looking at HDB resale flat transactions for the past 28 years, 1990 to 2018. The main motivation of this analysis is to get a hold on what the HDB resale market is like. In economics, we are interested in something called the equilibrium, where supply meets demand. This means that there's no surplus and no shortage of goods. If we think of housing as a good, well, it is a complex market because it is a good that cannot be built quickly, so perfect matching of supply with demand is not feasible. In this analysis, we will be looking at:
 
 1. Some charts built from Tableau and Python
-2. HDB resale flat suggestion tool
+2. HDB resale flat suggestion tool 
 3. Predicting housing prices ([link](2_regression.ipynb))
 4. Difference-in-differences model to estimate the impact of the opening of downtown MRT line have on housing prices
 
