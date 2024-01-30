@@ -1,0 +1,22 @@
+program: src/train.py
+method: bayes
+metric:
+  name: within_10
+  goal: maximize
+parameters:
+  n_estimators:
+    min: 10
+    max: 100
+  max_depth:
+    min: 1
+    max: 10
+  min_samples_split:
+    min: 2
+    max: 10
+  min_samples_leaf:
+    min: 1
+    max: 10
+
+command:
+- ${interpreter}
+- ${program}
