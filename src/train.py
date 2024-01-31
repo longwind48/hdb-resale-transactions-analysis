@@ -1,30 +1,29 @@
-"""
-This script is used for training a RandomForestRegressor model to predict the HDB resale prices.
+"""This script is used for training a RandomForestRegressor model to predict the HDB resale prices.
 It uses data from the 1990 to 2023, performs data cleaning feature engineering and
-model training steps. The script supports hyperparameters and metrics in wandb and saves 
+model training steps. The script supports hyperparameters and metrics in wandb and saves
 the best model.
 
 Example usage:
 poetry run python -m src.train --wand-config-path config/sweep_rf.yaml --log-level INFO
 """
 
+import pickle
+import sys
+from datetime import datetime
+
+import numpy as np
+import pandas as pd
 import typer
 import wandb
 import yaml
-import sys
-import pandas as pd
-import numpy as np
-import pickle
 from loguru import logger
-from datetime import datetime
-
-from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
-
-from src.feat_eng import clean_data, add_features
+from src.feat_eng import clean_data, clean_label, prepare_features
 
 app = typer.Typer()
 PROJECT_NAME = "hdb-resale-price-prediction"
+REGISTERED_MODEL_NAME = "rf-w10-model"
+ALIASES = ["latest"]
 best_model_performance = None
 best_model = None
 best_run_id = None  # Store the ID of the run with the best model
@@ -40,7 +39,9 @@ def within_10(model, X_test, y_test):
 
 @app.command()
 def main(
-    wand_config_path: str = typer.Option(..., "--wand-config-path", help="Path to the wandb configuration file."),
+    wand_config_path: str = typer.Option(
+        ..., "--wand-config-path", help="Path to the wandb configuration file."
+    ),
     log_level: str = typer.Option("INFO", "--log-level", help="Logging level."),
 ):
     global best_model_performance, best_model
@@ -67,23 +68,17 @@ def train_model():
     df = pd.read_parquet("data/raw/resale_hdb_data.parquet")
 
     # Downloaded from https://tablebuilder.singstat.gov.sg/table/TS/M212882
-    df_cpi = pd.read_csv("data/raw/cpi_housing.csv", index_col=0).iloc[9:757, :1].reset_index(drop=False)
+    df_cpi = (
+        pd.read_csv("data/raw/cpi_housing.csv", index_col=0).iloc[9:757, :1].reset_index(drop=False)
+    )
     df_cpi.columns = ["month", "cpi"]
 
     # Clean data
-    logger.info("Cleaning data...")
-    df = clean_data(df, df_cpi)
+    df = clean_data(df)
+    df = clean_label(df, df_cpi)
 
     # Add features
-    logger.info("Adding features...")
-    df = add_features(df)
-
-    # train test split
-    logger.info("Splitting data into train and test sets...")
-    y = df["real_price"]
-    X = df.drop(["real_price", "town", "year"], axis=1)
-
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, shuffle=True, random_state=0)
+    X_train, X_test, y_train, y_test = prepare_features(df)
 
     # instead of defining hard values
     n_estimators = wandb.config.n_estimators
@@ -133,17 +128,10 @@ def save_best_model():
     with open(model_path, "wb") as f:
         pickle.dump(best_model, f)
 
-    wandb.init(project=PROJECT_NAME, id=best_run_id, resume="must")
+    run = wandb.init(project=PROJECT_NAME)
+    run.link_model(path=model_path, registered_model_name=REGISTERED_MODEL_NAME, aliases=ALIASES)
 
-    art = wandb.Artifact(
-        f"best_model_run_{best_run_id}",
-        type="model",
-        metadata={"w10": best_model_performance, "model_type": "rf", "format": "pickle"},
-    )
-    art.add_file(model_path)
-
-    wandb.log_artifact(art, aliases=["best_model"])
-    logger.info(f"Best model saved to wandb as {model_filename}.")
+    logger.info(f"Best model saved to wandb model registry as {REGISTERED_MODEL_NAME}.")
 
 
 if __name__ == "__main__":
