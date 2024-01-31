@@ -103,6 +103,9 @@ COPY --from=poetry $VIRTUAL_ENV $VIRTUAL_ENV
 # Copy the package source code to the working directory.
 COPY --chown=user:user . .
 
-# Expose the application.
-ENTRYPOINT ["/opt/resale-prop-analysis-env/bin/poe"]
-CMD ["api"]
+# Expose the application on port 8000
+EXPOSE 8000
+
+# Set the command to run the Uvicorn server
+CMD ["uvicorn", "src.api:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
