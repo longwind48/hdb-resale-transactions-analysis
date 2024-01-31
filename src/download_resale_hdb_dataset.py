@@ -1,25 +1,24 @@
-"""
-Python CLI script to download 34 years of resale HDB data from data.gov.sg and save it in 
+"""Python CLI script to download 34 years of resale HDB data from data.gov.sg and save it in
 the specified format to the given destination. Resale HDB data is available from 1990 to present (2024).
 
 example command:
 poetry run python src/download_resale_hdb_dataset.py --output-format parquet --destination data/raw --log-level INFO
 
 """
-import sys
-import requests
-import pandas as pd
-from loguru import logger
-import typer
 import os
+import sys
+
+import pandas as pd
+import requests
+import typer
+from loguru import logger
 from pydantic import BaseModel, field_validator
 
 app = typer.Typer()
 
 
 class ResaleHDBDataRequest(BaseModel):
-    """
-    A Pydantic model for validating output format and destination path for downloading Resale HDB data.
+    """A Pydantic model for validating output format and destination path for downloading Resale HDB data.
 
     Attributes:
         output_format: The format in which to save the data ('csv' or 'parquet').
@@ -37,8 +36,7 @@ class ResaleHDBDataRequest(BaseModel):
 
 
 def search_for_resale_hdb_datasets():
-    """
-    Search for resale HDB datasets from data.gov.sg.
+    """Search for resale HDB datasets from data.gov.sg.
 
     Returns:
         List[dict]: A list of datasets that contain resale HDB data.
@@ -46,7 +44,9 @@ def search_for_resale_hdb_datasets():
     datasets_to_query = []
     page = 1
     while True:
-        response = requests.get(f"https://api-production.data.gov.sg/v2/public/api/datasets?page={page}")
+        response = requests.get(
+            f"https://api-production.data.gov.sg/v2/public/api/datasets?page={page}"
+        )
         datasets = response.json()["data"]["datasets"]
         if not datasets:  # If datasets is empty, break the loop
             break
@@ -66,8 +66,7 @@ def download_resale_hdb_data(
         "INFO", help="Set the logging level ('DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL')"
     ),
 ):
-    """
-    Download resale HDB data from data.gov.sg and save it in the specified format to the given destination.
+    """Download resale HDB data from data.gov.sg and save it in the specified format to the given destination.
 
     Args:
         output_format (str): The format in which to save the data ('csv' or 'parquet').
@@ -75,7 +74,9 @@ def download_resale_hdb_data(
     """
     # Configure Loguru logger
     logger.remove()  # Remove default logger configuration
-    logger.add(sys.stderr, level=log_level.upper())  # Add new configuration with specified log level
+    logger.add(
+        sys.stderr, level=log_level.upper()
+    )  # Add new configuration with specified log level
 
     # Validate input arguments
     request = ResaleHDBDataRequest(output_format=output_format, destination=destination)
@@ -114,8 +115,7 @@ def download_resale_hdb_data(
 
 
 def query_dataset(dataset_id: str):
-    """
-    Query a specific dataset from data.gov.sg using its dataset ID.
+    """Query a specific dataset from data.gov.sg using its dataset ID.
 
     Args:
         dataset_id (str): The unique identifier of the dataset to query.
@@ -132,7 +132,9 @@ def query_dataset(dataset_id: str):
             params={"limit": 10000, "offset": offset},
         )
         if response.json()["success"] == True:
-            logger.debug(f"Retrieved {offset} rows of {total} rows for dataset_id: {dataset_id[:4]}...")
+            logger.debug(
+                f"Retrieved {offset} rows of {total} rows for dataset_id: {dataset_id[:4]}..."
+            )
 
             result = response.json()["result"]
             records = result["records"]
