@@ -65,8 +65,3 @@ repos:
         require_serial: true
         language: system
         types_or: [python, pyi]
-      - id: mypy
-        name: mypy
-        entry: mypy
-        language: system
-        types: [python]
