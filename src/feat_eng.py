@@ -264,6 +264,7 @@ def prepare_features_for_inference(payload):
     non_numeric_columns = ["town", "flat_type", "storey_range", "flat_model"]
     label_encoders = {}
     for col in non_numeric_columns:
+        print(f"Loading label encoder for {col}")
         label_encoders[col] = load(f"{LABEL_ENCODERS_PATH}/label_encoder_{col}.joblib")
         df[col] = label_encoders[col].transform(df[col])
 
