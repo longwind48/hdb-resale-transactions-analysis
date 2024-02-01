@@ -49,7 +49,6 @@ COPY --chown=user:user poetry.lock* pyproject.toml /workspaces/resale-prop-analy
 RUN mkdir -p /home/user/.cache/pypoetry/ && mkdir -p /home/user/.config/pypoetry/ && \
     mkdir -p src/resale_prop_analysis/ && touch src/resale_prop_analysis/__init__.py && touch README.md
 RUN --mount=type=cache,uid=$UID,gid=$GID,target=/home/user/.cache/pypoetry/ \
-    poetry lock --no-update \
     poetry install --only main --no-interaction
 
 
