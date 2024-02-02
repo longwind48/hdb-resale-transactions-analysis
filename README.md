@@ -1,84 +1,67 @@
-[![Open in Dev Containers](https://img.shields.io/static/v1?label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/user/my-package)
+# Resale HDB Analysis
 
-# resale-prop-analysis
+A python-based project that analyse Singapore public housing for my own benefit lol.
+Follow the instructions in getting started section to deploy a machine learning model locally via Docker.
 
-A python-based project that analyse sg properties for my own benefit lol
+## Notebooks
+All analysis and experiments are in the notebooks directory.
 
-## Using
+| Notebook Name | Year Created | Description |
+|---------------|--------------|-------------|
+| [1_data_preprocessing.ipynb](https://github.com/longwind48/hdb-resale-transactions-analysis/blob/master/notebooks/1_data_preprocessing.ipynb) | 2019 | Preprocessing data purposes. Uses deprecated OneMap API. |
+| [2_regression.ipynb](https://github.com/longwind48/hdb-resale-transactions-analysis/blob/master/notebooks/2_regression.ipynb) | 2019 | Build simple model to predict HDB resale flats prices in 2018. |
+| [3_multiclass_classification.ipynb](https://github.com/longwind48/hdb-resale-transactions-analysis/blob/master/notebooks/3_multiclass_classification.ipynb) | 2019 | To predict flat type for flats from 2015 onwards. |
+| [4_diff_n_diff_plot.ipynb](https://github.com/longwind48/hdb-resale-transactions-analysis/blob/master/notebooks/4_diff_n_diff_plot.ipynb) | 2019 | Plot diff-in-diff model. |
+| [5_diff_n_diff_model.ipynb](https://github.com/longwind48/hdb-resale-transactions-analysis/blob/master/notebooks/5_diff_n_diff_model.ipynb) | 2019 | Conduct diff-in-diff analysis to measure downtown stations' impact on property prices. |
+| [prime_vs_remote_hdb_2024.ipynb](https://github.com/longwind48/hdb-resale-transactions-analysis/blob/master/notebooks/prime_vs_remote_hdb_2024.ipynb) | 2024 | Data analysis to decide between prime-location HDB or more remote HDB. |
+| [train_baseline_model_300124.ipynb](https://github.com/longwind48/hdb-resale-transactions-analysis/blob/master/notebooks/train_baseline_model_300124.ipynb) | 2024 | Create baseline model to predict resale HDB prices. |
 
-_Python package_: to add and install this package as a dependency of your project, run `poetry add resale-prop-analysis`.
 
-_Python CLI_: to view this app's CLI commands once it's installed, run `resale-prop-analysis --help`.
+## Getting Started
+These instructions will get your project up and running on your local machine for development and testing purposes.
 
-_Python application_: to serve this REST API, run `docker compose up app` and open [localhost:8000](http://localhost:8000) in your browser. Within the Dev Container, this is equivalent to running `poe api`.
+### Prerequisites
+- Python 3.x
+- Poetry
+- Docker (for Docker deployment)
 
-## Contributing
+### Commands
+1. Initialize the Python Environment:
+    Use Poetry to install dependencies and activate the virtual environment.
 
-<details>
-<summary>Prerequisites</summary>
-
-<details>
-<summary>1. Set up Git to use SSH</summary>
-
-1. [Generate an SSH key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#generating-a-new-ssh-key) and [add the SSH key to your GitHub account](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account).
-1. Configure SSH to automatically load your SSH keys:
-    ```sh
-    cat << EOF >> ~/.ssh/config
-    Host *
-      AddKeysToAgent yes
-      IgnoreUnknown UseKeychain
-      UseKeychain yes
-    EOF
+    ```bash
+    poetry install
+    poetry shell
     ```
 
-</details>
+2. Download 34 Years of HDB Resale Data:
+    This command downloads the HDB resale data and saves it in the specified format and location.
 
-<details>
-<summary>2. Install Docker</summary>
+    ```bash
+    poetry run python src/download_resale_hdb_dataset.py --output-format parquet --destination data/raw --log-level INFO
+    ```
 
-1. [Install Docker Desktop](https://www.docker.com/get-started).
-    - Enable _Use Docker Compose V2_ in Docker Desktop's preferences window.
-    - _Linux only_:
-        - Export your user's user id and group id so that [files created in the Dev Container are owned by your user](https://github.com/moby/moby/issues/3206):
-            ```sh
-            cat << EOF >> ~/.bashrc
-            export UID=$(id --user)
-            export GID=$(id --group)
-            EOF
-            ```
+3. Train the baseline model to predict housing prices 
+    To train the model using the downloaded dataset, run the following command. This uses the configurations specified in the config/sweep_rf.yaml file.
 
-</details>
+    ```bash
+    poetry run python -m src.train --wand-config-path config/sweep_rf.yaml --log-level INFO
+    ```
 
-<details>
-<summary>3. Install VS Code or PyCharm</summary>
+4. Deployment
+    - Local Deployment
+      To deploy the application locally for development and testing:
 
-1. [Install VS Code](https://code.visualstudio.com/) and [VS Code's Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers). Alternatively, install [PyCharm](https://www.jetbrains.com/pycharm/download/).
-2. _Optional:_ install a [Nerd Font](https://www.nerdfonts.com/font-downloads) such as [FiraCode Nerd Font](https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/FiraCode) and [configure VS Code](https://github.com/tonsky/FiraCode/wiki/VS-Code-Instructions) or [configure PyCharm](https://github.com/tonsky/FiraCode/wiki/Intellij-products-instructions) to use it.
+    ```bash
+    uvicorn src.api:app --reload
+    ```
 
-</details>
+    - Local Deployment Using Docker
+    For deploying with Docker, ensure Docker is installed and running on your system. Then execute the following command:
 
-</details>
+    ```bash
+    docker-compose up -d --build app
+    ```
 
-<details open>
-<summary>Development environments</summary>
-
-The following development environments are supported:
-
-1. ⭐️ _GitHub Codespaces_: click on _Code_ and select _Create codespace_ to start a Dev Container with [GitHub Codespaces](https://github.com/features/codespaces).
-1. ⭐️ _Dev Container (with container volume)_: click on [Open in Dev Containers](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/user/my-package) to clone this repository in a container volume and create a Dev Container with VS Code.
-1. _Dev Container_: clone this repository, open it with VS Code, and run <kbd>Ctrl/⌘</kbd> + <kbd>⇧</kbd> + <kbd>P</kbd> → _Dev Containers: Reopen in Container_.
-1. _PyCharm_: clone this repository, open it with PyCharm, and [configure Docker Compose as a remote interpreter](https://www.jetbrains.com/help/pycharm/using-docker-compose-as-a-remote-interpreter.html#docker-compose-remote) with the `dev` service.
-1. _Terminal_: clone this repository, open it with your terminal, and run `docker compose up --detach dev` to start a Dev Container in the background, and then run `docker compose exec dev zsh` to open a shell prompt in the Dev Container.
-
-</details>
-
-<details>
-<summary>Developing</summary>
-
-- This project follows the [Conventional Commits](https://www.conventionalcommits.org/) standard to automate [Semantic Versioning](https://semver.org/) and [Keep A Changelog](https://keepachangelog.com/) with [Commitizen](https://github.com/commitizen-tools/commitizen).
-- Run `poe` from within the development environment to print a list of [Poe the Poet](https://github.com/nat-n/poethepoet) tasks available to run on this project.
-- Run `poetry add {package}` from within the development environment to install a run time dependency and add it to `pyproject.toml` and `poetry.lock`. Add `--group test` or `--group dev` to install a CI or development dependency, respectively.
-- Run `poetry update` from within the development environment to upgrade all dependencies to the latest versions allowed by `pyproject.toml`.
-- Run `cz bump` to bump the package's version, update the `CHANGELOG.md`, and create a git tag.
-
-</details>
+## Contributing
+If you would like to contribute to this project, please fork the repository and send a pull request with your proposed changes. Make sure to follow the project's code style and add unit tests for any new or changed functionality.
