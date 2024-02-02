@@ -9,6 +9,7 @@ on:
 
 jobs:
   test:
+    environment: new_env
     runs-on: ubuntu-latest
 
     strategy:
@@ -39,6 +40,8 @@ jobs:
         run: devcontainer exec --workspace-folder . poe lint
 
       - name: Test package
+        env: # wandb api key
+          WANDB_API_KEY: ${{ env.WANDB_API_KEY }}
         run: devcontainer exec --workspace-folder . poe test
 
       - name: Upload coverage
