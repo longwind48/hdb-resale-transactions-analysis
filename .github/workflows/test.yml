@@ -38,6 +38,13 @@ jobs:
 
       - name: Lint package
         run: devcontainer exec --workspace-folder . poe lint
+    
+      - name: test secret
+        shell: bash
+        env:
+          WANDB_API_KEY: ${{ secrets.WANDB_API_KEY }}
+        run: |
+          example-command "$WANDB_API_KEY"
 
       - name: Test package
         env: # wandb api key
