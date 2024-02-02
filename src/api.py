@@ -35,6 +35,7 @@ async def lifespan(app: FastAPI):
         # Download the model from wandb if it's not already downloaded
         try:
             wandb.login(key=os.getenv("WANDB_API_KEY"))
+            print("xxxxxxxxxxxxxxxxxxxxx", os.getenv("WANDB_API_KEY"))
             run = wandb.init(project=PROJECT_NAME, job_type="inference")
             logger.info(f"Loading model from {REGISTERED_MODEL_NAME}...")
             artifact = run.use_artifact(
