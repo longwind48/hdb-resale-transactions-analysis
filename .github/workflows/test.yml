@@ -41,7 +41,7 @@ jobs:
 
       - name: Test package
         env: # wandb api key
-          WANDB_API_KEY: ${{ env.WANDB_API_KEY }}
+          WANDB_API_KEY: ${{ secrets.WANDB_API_KEY }}
         run: devcontainer exec --workspace-folder . poe test
 
       - name: Upload coverage
